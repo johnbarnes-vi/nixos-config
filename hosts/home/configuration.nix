@@ -139,6 +139,7 @@
     tree
     spotify
     discord
+    minecraft
     #  wget
   ];
 
