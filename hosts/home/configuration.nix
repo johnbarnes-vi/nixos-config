@@ -160,6 +160,7 @@
     ntfs3g
     qbittorrent
     tmux
+    p7zip
     #  wget
   ];
 
@@ -195,6 +196,7 @@
           max-players = 5;
           motd = "Welcome to ColonialCraftMC!";
           server-name = "ColonialCraftMC";
+          level-name = "world";
         };
 
         whitelist = {
@@ -204,7 +206,6 @@
       };
     };
   };
-
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
