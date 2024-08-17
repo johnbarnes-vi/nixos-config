@@ -9,17 +9,22 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       inputs.home-manager.nixosModules.default
+      inputs.nix-minecraft.nixosModules.minecraft-servers
     ];
+
+  nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
+
+  boot.supportedFilesystems = [ "ntfs" ];
 
   # Bootloader.
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
-      efiSysMountPoint = "/efi"; # default was /boot
+      efiSysMountPoint = "/boot";
     };
     grub = {
       enable = true;
-      devices = [ "nodev" ];
+      device = "nodev";
       efiSupport = true;
       useOSProber = true;
     };
@@ -150,7 +155,11 @@
     tree
     spotify
     discord
-    minecraft
+    prismlauncher #minecraft launcher
+    os-prober
+    ntfs3g
+    qbittorrent
+    tmux
     #  wget
   ];
 
@@ -164,6 +173,39 @@
 
   # List services that you want to enable:
 
+  # Minecraft Server
+  services.minecraft-servers = {
+    enable = true;
+    eula = true;
+    openFirewall = true;
+
+    dataDir = "/var/lib/mc-servers";
+
+    servers = {
+      colonial-craft-mc = {
+        enable = true;
+        openFirewall = true;
+        package = pkgs.vanillaServers.vanilla-1_18;
+        jvmOpts = "-Xmx2G -Xms1G";
+
+        serverProperties = {
+          server-port = 7077;
+          gamemode = "survival";
+          difficulty = "hard";
+          max-players = 5;
+          motd = "Welcome to ColonialCraftMC!";
+          server-name = "ColonialCraftMC";
+        };
+
+        whitelist = {
+          OcdJonny = "a62d1f4e-ecf7-4825-b8aa-5db0701e6fa6";
+          Stanton__ = "c566f75e-e75f-4c34-a0a6-37975cb67cd4";
+        };
+      };
+    };
+  };
+
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
@@ -171,7 +213,7 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
