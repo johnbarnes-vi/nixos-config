@@ -68,13 +68,35 @@
 
   # Configure keymap in X11
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    xkb.layout = "us";
+    xkb.variant = "";
   };
   
-  # Enable NVIDIA Drivers
-  services.xserver.videoDrivers = [ "nvidia" ];
-  #hardware.nvidia.modesetting.enable = true;
+  # Enable OpenGL
+  hardware.opengl = {
+    enable = true;
+  };
+
+  # Load nvidia driver for Xorg and Wayland
+  services.xserver.videoDrivers = ["nvidia"];
+
+  hardware.nvidia = {
+
+    # Modesetting is required.
+    modesetting.enable = true;
+
+    # Use the NVidia open source kernel module (not to be confused with the
+    # independent third-party "nouveau" open source driver).
+    # Currently alpha-quality/buggy, so false is currently the recommended setting.
+    open = false;
+
+    # Enable the Nvidia settings menu,
+	  # accessible via `nvidia-settings`.
+    nvidiaSettings = true;
+
+    # Optionally, you may need to select the appropriate driver version for your specific GPU.
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -106,7 +128,7 @@
   users.users.jb = {
     isNormalUser = true;
     description = "jb";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "minecraft"];
     packages = with pkgs; [
       google-chrome
       gimp
@@ -122,8 +144,8 @@
   };  
 
   # Enable automatic login for the user. 
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "jb";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "jb";
 
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
@@ -155,6 +177,7 @@
     tree
     spotify
     discord
+    teams-for-linux
     prismlauncher #minecraft launcher
     os-prober
     ntfs3g
@@ -174,7 +197,7 @@
 
   # List services that you want to enable:
 
-  # Minecraft Server
+  # Minecraft Server, imperatively mananged plugins (gave up on declarative for now)
   services.minecraft-servers = {
     enable = true;
     eula = true;
@@ -186,9 +209,8 @@
       colonial-craft-mc = {
         enable = true;
         openFirewall = true;
-        package = pkgs.vanillaServers.vanilla-1_18;
-        jvmOpts = "-Xmx2G -Xms1G";
-
+        package = pkgs.paperServers.paper-1_21_1; # this should be paper for ideal server
+        jvmOpts = "-Xmx16G -Xms8G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1";
         serverProperties = {
           server-port = 7077;
           gamemode = "survival";
@@ -197,11 +219,34 @@
           motd = "Welcome to ColonialCraftMC!";
           server-name = "ColonialCraftMC";
           level-name = "world";
+          simulation-distance = 32;
+          enforce-secure-profile = false; # for GeyserMC crossplay from bedrock clients
+          white-list = false;
         };
 
         whitelist = {
           OcdJonny = "a62d1f4e-ecf7-4825-b8aa-5db0701e6fa6";
           Stanton__ = "c566f75e-e75f-4c34-a0a6-37975cb67cd4";
+        };
+
+        symlinks = {
+          "ops.json" = pkgs.writeTextFile {
+            name = "ops.json";
+            text = builtins.toJSON [
+              {
+                uuid = "a62d1f4e-ecf7-4825-b8aa-5db0701e6fa6";
+                name = "OcdJonny";
+                level = 4;
+                bypassesPlayerLimit = false;
+              }
+              {
+                uuid = "c566f75e-e75f-4c34-a0a6-37975cb67cd4";
+                name = "Stanton__";
+                level = 4;
+                bypassesPlayerLimit = false;
+              }
+            ];
+          };
         };
       };
     };
