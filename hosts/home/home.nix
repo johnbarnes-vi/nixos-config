@@ -165,6 +165,8 @@
       file-icons.file-icons
       dbaeumer.vscode-eslint
       ms-vscode-remote.remote-ssh
+      haskell.haskell
+      justusadam.language-haskell
     ];
     userSettings = {
       "update.mode" = "none";

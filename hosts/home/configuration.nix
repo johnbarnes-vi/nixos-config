@@ -184,6 +184,7 @@
     qbittorrent
     tmux
     p7zip
+    texliveFull
     #  wget
   ];
 
