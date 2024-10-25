@@ -200,7 +200,7 @@
 
   # Minecraft Server, imperatively mananged plugins (gave up on declarative for now)
   services.minecraft-servers = {
-    enable = true;
+    enable = false; # change to true to enable, obviously <-------------------------------
     eula = true;
     openFirewall = true;
 
@@ -219,7 +219,7 @@
           max-players = 5;
           motd = "Welcome to ColonialCraftMC!";
           server-name = "ColonialCraftMC";
-          level-name = "world";
+          level-name = "world-test";
           simulation-distance = 32;
           enforce-secure-profile = false; # for GeyserMC crossplay from bedrock clients
           white-list = false;

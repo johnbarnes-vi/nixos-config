@@ -151,8 +151,8 @@
  
   programs.vscode = {
     enable = true;
+    enableExtensionUpdateCheck = false;
     extensions = with pkgs.vscode-extensions; [
-      dracula-theme.theme-dracula
       mkhl.direnv
       bbenoist.nix
       ms-python.python
@@ -169,9 +169,9 @@
       justusadam.language-haskell
     ];
     userSettings = {
-      "update.mode" = "none";
+      "extensions.autoCheckUpdates" = false;
+      "extensions.autoUpdate" = false;
       "editor.minimap.enabled" = false;
-      "workbench.colorTheme" = "Dracula";
     };
   };
 
