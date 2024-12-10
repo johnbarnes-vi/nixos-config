@@ -73,7 +73,7 @@
   };
   
   # Enable OpenGL
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
 
@@ -105,7 +105,6 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -185,7 +184,9 @@
     tmux
     p7zip
     texliveFull
-    #  wget
+    proj
+    geos
+    wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
