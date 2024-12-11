@@ -14,7 +14,7 @@
 
   nixpkgs.overlays = [ inputs.nix-minecraft.overlay ];
 
-  boot.supportedFilesystems = [ "ntfs" ];
+  boot.supportedFilesystems = [ "ntfs" ]; # maybe fix this so we can access windows again lol
 
   # Bootloader.
   boot.loader = {
@@ -80,6 +80,10 @@
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = ["nvidia"];
 
+  # Enable GPU inside docker containers
+  hardware.nvidia-container-toolkit.enable = true;
+
+  # Nvidia GPU settings
   hardware.nvidia = {
 
     # Modesetting is required.
@@ -123,11 +127,14 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Enable docker daemon
+  virtualisation.docker.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jb = {
     isNormalUser = true;
     description = "jb";
-    extraGroups = [ "networkmanager" "wheel" "minecraft"];
+    extraGroups = [ "networkmanager" "wheel" "minecraft" "docker"];
     packages = with pkgs; [
       google-chrome
       gimp
