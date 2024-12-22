@@ -1,5 +1,15 @@
 { config, pkgs, lib, ... }:
 
+let
+  esp-idf-extension = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "esp-idf-extension";
+      publisher = "espressif";
+      version = "1.9.0";
+      sha256 = "sha256-Aym282DsR2a9KPSShcyDJzk5cy/5G9zYy37NO6A6SP8=";
+    };
+  };
+in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -167,6 +177,7 @@
       ms-vscode-remote.remote-ssh
       haskell.haskell
       justusadam.language-haskell
+      esp-idf-extension
     ];
     userSettings = {
       "extensions.autoCheckUpdates" = false;
