@@ -1,15 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let
-  esp-idf-extension = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
-    mktplcRef = {
-      name = "esp-idf-extension";
-      publisher = "espressif";
-      version = "1.9.0";
-      sha256 = "sha256-Aym282DsR2a9KPSShcyDJzk5cy/5G9zYy37NO6A6SP8=";
-    };
-  };
-in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
@@ -139,61 +129,6 @@ in
       "tile-bottomright-quarter" = ["<Ctrl>KP_3"];
       "tile-bottom-half" = ["<Ctrl>KP_2"];
     };
-  };
-
-  # Configure Visual Studio Code
-  imports = [
-    "${fetchTarball {
-      url = "https://github.com/msteen/nixos-vscode-server/tarball/master";
-      sha256 = "1rq8mrlmbzpcbv9ys0x88alw30ks70jlmvnfr2j8v830yy5wvw7h";
-    }}/modules/vscode-server/home.nix"
-  ];
-
-  services.vscode-server.enable = true;
-
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (pkgs.lib.getName pkg) [
-      "vscode"
-      "vscode-extension-MS-python-vscode-pylance"
-      "vscode-extension-ms-vscode-cpptools"
-      "vscode-extension-ms-vscode-remote-remote-ssh"
-    ];
- 
-  programs.vscode = {
-    enable = true;
-    enableExtensionUpdateCheck = false;
-    extensions = with pkgs.vscode-extensions; [
-      mkhl.direnv
-      bbenoist.nix
-      ms-python.python
-      ms-python.vscode-pylance
-      ms-vscode.cpptools
-      ms-toolsai.jupyter
-      ms-toolsai.jupyter-keymap
-      ms-toolsai.jupyter-renderers
-      tomoki1207.pdf
-      file-icons.file-icons
-      dbaeumer.vscode-eslint
-      ms-vscode-remote.remote-ssh
-      haskell.haskell
-      justusadam.language-haskell
-      esp-idf-extension
-    ];
-    userSettings = {
-      "extensions.autoCheckUpdates" = false;
-      "extensions.autoUpdate" = false;
-      "editor.minimap.enabled" = false;
-    };
-  };
-
-  # Ceate a symlink for the VS Code settings because settings.json is read only
-  home.activation = {
-    linkVSCodeSettings = config.lib.dag.entryAfter ["writeBoundary"] ''
-      if [ ! -e "$HOME/.config/Code/User/settings.json" ]; then
-        mkdir -p "$HOME/.config/Code/User"
-        ln -s "$HOME/.config/Code/User/settings.json" "$HOME/.config/Code/User/settings.json"
-      fi
-    '';
   };
 
   # Enable git

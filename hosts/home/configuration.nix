@@ -194,6 +194,31 @@
     proj
     geos
     wget
+    (vscode-with-extensions.override {
+      vscodeExtensions = with vscode-extensions; [
+        mkhl.direnv
+        bbenoist.nix
+        ms-python.python
+        ms-python.vscode-pylance
+        ms-vscode.cpptools
+        ms-toolsai.jupyter
+        ms-toolsai.jupyter-keymap
+        ms-toolsai.jupyter-renderers
+        tomoki1207.pdf
+        file-icons.file-icons
+        dbaeumer.vscode-eslint
+        ms-vscode-remote.remote-ssh
+        haskell.haskell
+        justusadam.language-haskell
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "esp-idf-extension";
+          publisher = "espressif";
+          version = "1.9.0";
+          sha256 = "sha256-Aym282DsR2a9KPSShcyDJzk5cy/5G9zYy37NO6A6SP8=";
+        }
+      ];
+    })
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
