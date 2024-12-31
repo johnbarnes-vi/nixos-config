@@ -134,10 +134,13 @@
   users.users.jb = {
     isNormalUser = true;
     description = "jb";
-    extraGroups = [ "networkmanager" "wheel" "minecraft" "docker"];
+    extraGroups = [ "networkmanager" "wheel" "minecraft" "docker" "dialout" "plugdev" ];
     packages = with pkgs; [
       google-chrome
       gimp
+    ];
+    openssh.authorizedKeys.keys = [
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDbD147g1OsgWaJbNK9p+EAzYYHpqQYKSSwOO0cHs68UWR0UjVOS7tQRbp8wF8Kmrp0PgztPeL+3iVBxwz27nz/k0JLMAU6XB0+Zh7IFHhsz9zfAZnWiXnp4KrUqom63RDTE1vW3LH8rWpdy+uJOsegAjykK2FowbIhYtfc8uvvrc1fARemgDMjhD7u9edfPB8LBuoJAVFFtvm6NWq/vV0UZUX/it6hz7Eu4ME6fJ339VTsIdo2fkTUXkDnPIrK33wkXx1GUfBRpwDw1u7EJrfbvs7x3IAxrlDWCt0SI6EDCb4GRn3FrGcrEXhVgbKS7+0MfJo2EOxSLamNbL5p0/6UYZnEWteaOrRxVxpSaxEQmCwIwiNu6OdhuEgE8OUuvaHKOyGKhFIkVn7BoBHw5SwIRdMYj+AaCrp6rsuPFuzQw7RSo/5rHVr5trhHZGCaySQrqjIEDztIAmp3sgA3nbATJnJkJMQ7zxFH86nrYNQOg+ch0L28+/+G2Egnyaqvteuw2ceLTXcJ5L00GKaqwYl6aGhjQ3zOgipSMfz7LN2sBSE9QtJ6yh4SY+aZosBvqD6a3T4AzMEdkIBE8gNbn+yB96KnjNfLCGD5qT76bTK7h036n7WYcW20KofmiwIj6l/6fMbjEkvcdpi07sRGaM3dNXKet57mPHhXJ8vigxIF9Q== lj502jr@gmail.com"
     ];
   };
   
@@ -287,7 +290,18 @@
   };
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+    };
+    ports = [7077];
+  };
+
+
+  services.fail2ban.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
