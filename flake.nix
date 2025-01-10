@@ -12,6 +12,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-minecraft.url = "github:Infinidoge/nix-minecraft";
+    powermate.url = "github:johnbarnes-vi/powermate-nixos";
   };
 
   outputs = { self, nixpkgs, ... }@inputs: 
@@ -28,6 +29,7 @@
             ./hosts/home/configuration.nix
             inputs.home-manager.nixosModules.default
             inputs.nixos-vscode-server.nixosModule
+            inputs.powermate.nixosModules.default
           ];
       	};
 

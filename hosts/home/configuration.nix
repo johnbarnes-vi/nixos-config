@@ -124,11 +124,17 @@
     #media-session.enable = true;
   };
 
+  # Enable rtl-sdr device usage for non-root users
+  hardware.rtl-sdr.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
   # Enable docker daemon
   virtualisation.docker.enable = true;
+
+  # Enable Powermate controller  
+  services.powermate-controller.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.jb = {
@@ -197,6 +203,7 @@
     proj
     geos
     wget
+    rtl-sdr
     (vscode-with-extensions.override {
       vscodeExtensions = with vscode-extensions; [
         mkhl.direnv
