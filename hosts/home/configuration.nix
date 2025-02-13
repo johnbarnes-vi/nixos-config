@@ -179,9 +179,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Environement session variables
+  # Environment session variables
   environment.sessionVariables = {
-	  FLAKE = "/home/jb/nixos";
+    FLAKE = "/home/jb/nixos";
   };
 
   # List packages installed in system profile. To search, run:

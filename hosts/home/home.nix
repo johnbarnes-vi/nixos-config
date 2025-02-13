@@ -134,6 +134,7 @@
   # Enable git
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "johnbarnes-vi";
     userEmail = "lj502jr@gmail.com";
   };
